@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!--  On a ici importé nos liens CDN indispensables pour notre app React -->
+
+    <script
+      src="https://unpkg.com/react@18/umd/react.development.js"
+      crossorigin
+    ></script>
+    <!--   React – c'est l'API qui permettra de gérer les composants. -->
+    <script
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+    <!-- React DOM – c’est l'API qui est responsable de générer les composants dans
+    le DOM.  -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Babel – cet outil permet d'utiliser les dernières syntaxes de JS dans le
+    navigateur (ES6+).  -->
+  </head>
+  <body>
+    <div id="react-va-ici">
+      <!-- Le contenu de cet élément HTML sera remplacé par mes composants React -->
+    </div>
+
+    <script type="text/babel">
+      function Composant() {
+        return <h1>Composant React </h1>;
+      }
+
+      ReactDOM.render(<Composant />, document.getElementById('react-va-ici'));
+    </script>
+  </body>
+</html>
