@@ -22,8 +22,8 @@ function FetchData() {
     return (
         <div>
             <ul>
-                {posts.map((post, index) => (
-                    <li>
+                {posts.map((post) => (
+                    <li key={post.id}>
                         <div>
                             <h1>{post.id} {post.title} </h1>
                             <p>{post.presentation}</p>
@@ -37,14 +37,14 @@ function FetchData() {
 
                         <div>
                             <p>{post.logo.id}</p>
-                            <img src={post.logo.url} alt="logo"></img>
+                            <img src={post.logo.url} alt="logo" key={post.logo.url}></img>
                         </div>
 
                   {post.photos.map((photo, index) => {
                     return(
                         <div key={index}>
                         <p>{photo.id}</p>
-                        <img src={photo.url} alt="photo" width={500}></img>
+                        <img src={photo.url} alt="pic" width={500} key={photo.url}></img>
                       
                     </div>
                     );
