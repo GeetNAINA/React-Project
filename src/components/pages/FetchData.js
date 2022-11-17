@@ -3,7 +3,6 @@ import axios from "axios";
 
 function FetchData() {
     const [posts, setPosts] = useState([]);
-    const [pages, setPage] = useState([]);
 
 
     useEffect(() => {
@@ -12,16 +11,6 @@ function FetchData() {
             .then((res) => {
                 console.log(res.data.results);
                 setPosts(res.data.results);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-
-            axios
-            .get("https://bat-recup-staging-backend.cleverapps.io/api/current-annoucement")
-            .then((res) => {
-                console.log(res.data.paginations);
-                setPage(res.data.paginations);
             })
             .catch((err) => {
                 console.log(err);
@@ -113,17 +102,6 @@ function FetchData() {
                 ))
                 }
             </ul>
-
-            {pages.map((page, index) => (
-            <div key={index}>
-                <p>{page.start}</p>
-                <p>{page.limit}</p>
-                <p>{page.total}</p>
-            </div>
-        
-        ))
-        }
-
         </div>
 
     );
