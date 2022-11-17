@@ -3,15 +3,18 @@ import React, { useEffect, useState } from 'react';
 
 function FetchData() {
   const [posts, setPosts] = useState([]);
-
+  // useEffect allows to perform effects: this allows our component to perform actions after display, by choosing when this action should be performed. The useEffect hook is called after each rendering of your component.
+  // They allow us to perform an action at a given moment in the life cycle of our components.
   useEffect(() => {
+    // So here, as soon as the user arrives on your fetchData page, you will call the dynamic data from the api and once the api does not return any errors you update the states to store the JSON return WHICH YOU ARE GOING TO DISPLAY after calling the api
+    // all of this happens before the page is properly rendered
     axios
       .get(
         'https://bat-recup-staging-backend.cleverapps.io/api/current-annoucement' // create an .env file to store the api url
       )
       .then((res) => {
         console.log(res.data.results);
-        setPosts(res.data.results);
+        setPosts(res.data.results); // update array empty
       })
       .catch((err) => {
         console.log(err);
@@ -43,6 +46,17 @@ function FetchData() {
               <p>{post.logo.id}</p>
               <img src={post.logo.url} alt="logo"></img>
             </div>
+            {/*If you know the data type array , here we make a loop */}
+            {/*There are several ways to do the loop, that is to say browse the elements of the object array but Javascript there is already a powerful native function that will allow you to do this easily and that is the .MAP*/}
+            {/*you can use foreach or use the for classic loop
+
+              ex: for(i=0; i<data.length ; i++) {
+
+            }
+
+           */}
+
+            {/*So thanks to the loop, you will write less code to create tags. You need to add a KEY for each dynamically created tag, this will remove the error you have in your console*/}
 
             {post.photos.map((photo, index) => {
               return (
