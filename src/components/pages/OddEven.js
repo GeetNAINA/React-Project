@@ -48,7 +48,7 @@ function EvenOdd() {
     <div className="container">
       <div className="card mt-4">
         <div className="card-body">
-          <div className="text-center">
+          <div className="row">
             <h2 className="main-heading">Even and Odd Number</h2>
             <div className="underline mx-auto"></div>
             <div>
