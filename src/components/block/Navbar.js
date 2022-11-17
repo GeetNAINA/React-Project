@@ -30,6 +30,9 @@ function Navbar() {
         <li className="nav-item">
         <Link to="/fetchdata" className="nav-link">FetchData</Link>
         </li>
+        <li className="nav-item">
+        <Link to="/dynamic" className="nav-link">Dynamic ID</Link>
+        </li>
       </ul>
       <form className="d-flex" role="search">
         <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
