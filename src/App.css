@@ -26,6 +26,13 @@ p {
 .text-error {
   color: red;
 }
+.orange {
+  color: #f76c2f;
+}
+
+ul {
+  list-style: none;
+}
 
 /* .App {
   display: flex;
