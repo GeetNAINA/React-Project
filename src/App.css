@@ -70,6 +70,10 @@ textarea {
   color: red;
 }
 
+.content {
+  display: block;
+  
+}
 
 
 /* .App {
