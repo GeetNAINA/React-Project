@@ -8,6 +8,7 @@ import Annoucement from './components/pages/Annoucement';
 import Dynamic from './components/pages/Dynamic';
 import FetchData from './components/pages/FetchData';
 import OddEven from './components/pages/OddEven';
+import Login from './components/pages/Login'
 
 function Routing() {
   return (
@@ -19,6 +20,8 @@ function Routing() {
       <Route path="/fetchdata" element={<FetchData />} />
       <Route path="/dynamic" element={<Dynamic />} />
       <Route path="/annoucement/:id" element={<Annoucement />} />
+      <Route path="/login" element={<Login />} />
+
       {/* <Route path="/*" element={<Error />}/> */}
     </Routes>
   );
