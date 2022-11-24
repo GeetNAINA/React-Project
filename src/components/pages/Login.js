@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
+import { setAuthToken } from '../helpers/setAuthToken';
+
 
 function Login() {
     const initialValues = { email: '', password: '' };
@@ -15,33 +17,39 @@ function Login() {
     const handleSubmit = (e) => {
         e.preventDefault();
         setFormErrors(validate(formValues));
+            setIsSubmit(true);
 
         const PAYLOAD = {
             identifier: formValues.email,
             password: formValues.password
+          }
+          try {
+      axios.post(
+          'https://bat-recup-staging-backend.cleverapps.io/api/users-permissions/login-annuaire', PAYLOAD
+        )
+     
+          .then((resp) => {
+            console.log(resp.data);
+            const token = resp.data.token;
+            localStorage.setItem("token", token);
+            setAuthToken(token);
+            window.location.href = '/dashboard';
+          })
         }
-        try {
-             axios.post('https://bat-recup-staging-backend.cleverapps.io/api/users-permissions/login-annuaire', PAYLOAD);
-            setIsSubmit(true);
-        }
-        catch (err) {
-            if (!err?.response) {
+        catch(err) {
+            if (!err?.resp) {
                 setFormErrors('No server Response');
-            } else if (err.response?.status === 400) {
-                setFormErrors('Missing Username or Password');
+            } else if (err.resp?.status === 400) {
+                setFormErrors('Missing Username or Password')
             } else {
                 setFormErrors('Login Failed');
         }
-       
-    }
-}
-    
-    useEffect(() => {
-        console.log(formErrors);
-        // if (Object.keys(formErrors).length === 0 && isSubmit) {
-        //     console.log(formValues);
-        // }
-    });
+        }
+
+        
+        }
+
+
     const validate = (values) => {
         const errors = {};
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
@@ -60,16 +68,7 @@ function Login() {
         return errors;
     };
     return (
-        <>
-        { formErrors.length === 0 && isSubmit? (
-            <section>
-                <h1>You are logged in!</h1>
-                <br />
-                <p>
-                    Go to Home
-                </p>
-            </section>
-        ) : (
+
         <div>
             <section className="gradient-custom">
                 <div className="container py-5 h-100">
@@ -79,7 +78,6 @@ function Login() {
                                 <div className="card-body p-5 text-center">
 
                                     <div className="mt-md-2 pb-5">
-
                                         <h2 className="fw-bold mb-2 text-uppercase">Login</h2>
                                         <p className="text-dark-50 mb-5">Please enter your login and password!</p>
                                         <form onSubmit={handleSubmit}>
@@ -104,6 +102,7 @@ function Login() {
                                                 <label htmlFor="passwordInput">Password</label>
                                             </div>
                                             {isSubmit === true && formValues.password === '' && (
+                                                
                                                 <p className="text-error">{formErrors.password}</p>
                                             )}
 
@@ -125,8 +124,7 @@ function Login() {
                 </div>
             </section>
         </div>
-        )}
-        </>
+     
     );
 }
 

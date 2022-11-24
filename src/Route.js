@@ -9,6 +9,7 @@ import Dynamic from './components/pages/Dynamic';
 import FetchData from './components/pages/FetchData';
 import OddEven from './components/pages/OddEven';
 import Login from './components/pages/Login'
+import Dashboard from './components/pages/Dashboard';
 
 function Routing() {
   return (
@@ -21,6 +22,7 @@ function Routing() {
       <Route path="/dynamic" element={<Dynamic />} />
       <Route path="/annoucement/:id" element={<Annoucement />} />
       <Route path="/login" element={<Login />} />
+      <Route path='/dashboard'element={<Dashboard/>}/>
 
       {/* <Route path="/*" element={<Error />}/> */}
     </Routes>

@@ -1,7 +1,10 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
+
 
 function Navbar() {
+  const navigate = useNavigate();
   return (
     <div className="navbar-light bg-light shadow">
     <div className="container">
