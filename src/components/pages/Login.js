@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import axios from 'axios';
-import { setAuthToken } from '../helpers/setAuthToken';
 
 
 function Login() {
@@ -8,12 +7,19 @@ function Login() {
     const [formValues, setFormValues] = useState(initialValues);
     const [formErrors, setFormErrors] = useState({});
     const [isSubmit, setIsSubmit] = useState(false);
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormValues({ ...formValues, [name]: value }); // e.target receive the entered texts
         setFormErrors(validate(formValues));
+
     };
+
+    useEffect(() => {
+        console.log(formErrors);
+        if (Object.keys(formErrors).length === 0 && isSubmit) {
+          console.log(formValues);
+        }
+      });
     const handleSubmit = (e) => {
         e.preventDefault();
         setFormErrors(validate(formValues));
@@ -29,14 +35,16 @@ function Login() {
         )
      
           .then((resp) => {
-            console.log(resp.data);
-            const token = resp.data.token;
-            localStorage.setItem("token", token);
-            setAuthToken(token);
+           
+            alert('success')
+            localStorage.setItem('token', resp.data.token)
             window.location.href = '/dashboard';
+            console.log(resp.data);
           })
         }
         catch(err) {
+            console.log(err)
+            alert('Serivce Error')
             if (!err?.resp) {
                 setFormErrors('No server Response');
             } else if (err.resp?.status === 400) {
