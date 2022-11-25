@@ -40,6 +40,10 @@ function Navbar() {
       <div className='col-md-2'>
         <div className='d-flex flex-row-reverse'>
         <Link to="/login" className="btn btn-warning">Login</Link>
+        <button className="btn btn-warning"  onClick={() => {
+                localStorage.removeItem('token')
+                navigate('/Login')
+            }}>Logout</button> 
         </div>
       </div>
     </div>

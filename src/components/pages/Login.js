@@ -1,11 +1,15 @@
 import axios from 'axios';
 import React, { useState } from 'react';
+import {useNavigate} from 'react-router-dom';
+
 
 function Login() {
   const initialValues = { email: '', password: '' };
   const [formValues, setFormValues] = useState(initialValues);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
+  const [loading, setLoading]= useState( false);
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -16,6 +20,7 @@ function Login() {
     e.preventDefault();
     setFormErrors(validate(formValues));
     setIsSubmit(true);
+    setLoading(true);
 
     const PAYLOAD = {
       identifier: formValues.email,
@@ -30,17 +35,19 @@ function Login() {
 
         .then((resp) => {
           console.log(resp.data);
-          const token = resp.data.jwt;
+          const token = resp?.data?.jwt;
           localStorage.setItem('token', token); // are you sure that the object returned by the api has a token field? :D :P
-          window.location.href = '/dashboard'; // use the react router for the redirectio, must not forget it is that we had done
+          navigate('/dashboard');
+          setLoading(true);
         });
     } catch (err) {
-      if (!err?.resp) {
-        setFormErrors('No server Response');
-      } else if (err.resp?.status === 400) {
-        setFormErrors('Missing Username or Password');
+      setLoading(false);
+      console.log(err?.resp?.data?.error)
+       if (err.code === 'ERR_BAD_REQUEST') 
+       {
+        setFormErrors('Invalid User and Pasword');
       } else {
-        setFormErrors('Login Failed');
+        alert('Login Failed');
       } // THE ERROR MESSAGE IS NOT DISPLAYED
     }
   };
@@ -74,6 +81,10 @@ function Login() {
                     <p className="text-dark-50 mb-5">
                       Please enter your login and password!
                     </p>
+                    {isSubmit === true &&  formErrors.length > 0 && (
+                      <p className="text-error">{formErrors.error.message}</p>
+                    )}
+
                     <form onSubmit={handleSubmit}>
                       <div className="form-floating mb-3">
                         <input
@@ -107,20 +118,28 @@ function Login() {
                         <p className="text-error">{formErrors.password}</p>
                       )}
 
+
                       <p className="small mb-3 pb-lg-2">
                         <a className="text-dark-50" href="#!">
                           Forgot password?
                         </a>
                       </p>
 
-                      <button
+                    {!loading && <button
                         className="btn btn-dark btn-lg px-5"
                         type="submit"
-                      >
+                      > {''}
                         Login
-                      </button>
+                      </button>}  
+                      {loading && <button
+                        className="btn btn-dark btn-lg px-5"
+                        type="submit" disabled
+                      > {''}
+                           <i className='fas fa-spinner fa-spin'></i> Loading...
+                      </button>}
                     </form>
                   </div>
+
 
                   <div>
                     <p className="mb-0">
