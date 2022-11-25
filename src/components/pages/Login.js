@@ -1,50 +1,41 @@
-import React, {useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-
 
 function Login() {
     const initialValues = { email: '', password: '' };
     const [formValues, setFormValues] = useState(initialValues);
     const [formErrors, setFormErrors] = useState({});
     const [isSubmit, setIsSubmit] = useState(false);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormValues({ ...formValues, [name]: value }); // e.target receive the entered texts
         setFormErrors(validate(formValues));
-
     };
-
-    useEffect(() => {
-        console.log(formErrors);
-        if (Object.keys(formErrors).length === 0 && isSubmit) {
-          console.log(formValues);
-        }
-      });
     const handleSubmit = (e) => {
         e.preventDefault();
         setFormErrors(validate(formValues));
             setIsSubmit(true);
 
-        const PAYLOAD = {
-            identifier: formValues.email,
-            password: formValues.password
-          }
-          try {
-      axios.post(
-          'https://bat-recup-staging-backend.cleverapps.io/api/users-permissions/login-annuaire', PAYLOAD
+    const PAYLOAD = {
+      identifier: formValues.email,
+      password: formValues.password,
+    };
+    try {
+      axios
+        .post(
+          'https://bat-recup-staging-backend.cleverapps.io/api/users-permissions/login-annuaire',
+          PAYLOAD
         )
      
           .then((resp) => {
-           
-            alert('success')
-            localStorage.setItem('token', resp.data.token)
-            window.location.href = '/dashboard';
             console.log(resp.data);
+            const token = resp.data.token;
+            localStorage.setItem("token", token);
+            window.location.href = '/dashboard';
           })
         }
         catch(err) {
-            console.log(err)
-            alert('Serivce Error')
             if (!err?.resp) {
                 setFormErrors('No server Response');
             } else if (err.resp?.status === 400) {
@@ -101,39 +92,53 @@ function Login() {
                                                 <p className="text-error">{formErrors.email}</p>
                                             )}
 
-                                            <div className="form-floating mb-3">
-                                                <input type="password" name="password"
-                                                    className="form-control" id="passwordInput"
-                                                    placeholder="Password"
-                                                    value={formValues.password}
-                                                    onChange={handleChange} />
-                                                <label htmlFor="passwordInput">Password</label>
-                                            </div>
-                                            {isSubmit === true && formValues.password === '' && (
-                                                
-                                                <p className="text-error">{formErrors.password}</p>
-                                            )}
+                      <div className="form-floating mb-3">
+                        <input
+                          type="password"
+                          name="password"
+                          className="form-control"
+                          id="passwordInput"
+                          placeholder="Password"
+                          value={formValues.password}
+                          onChange={handleChange}
+                        />
+                        <label htmlFor="passwordInput">Password</label>
+                      </div>
+                      {isSubmit === true && formValues.password === '' && (
+                        <p className="text-error">{formErrors.password}</p>
+                      )}
 
-                                            <p className="small mb-3 pb-lg-2"><a className="text-dark-50" href="#!">Forgot password?</a></p>
+                      <p className="small mb-3 pb-lg-2">
+                        <a className="text-dark-50" href="#!">
+                          Forgot password?
+                        </a>
+                      </p>
 
-                                            <button className="btn btn-dark btn-lg px-5" type="submit">Login</button>
-                                        </form>
-                                    </div>
+                      <button
+                        className="btn btn-dark btn-lg px-5"
+                        type="submit"
+                      >
+                        Login
+                      </button>
+                    </form>
+                  </div>
 
-                                    <div>
-                                        <p className="mb-0">Don't have an account? <a href="#!" className="text-dark-50 fw-bold">Sign Up</a>
-                                        </p>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                  <div>
+                    <p className="mb-0">
+                      Don't have an account?{' '}
+                      <a href="#!" className="text-dark-50 fw-bold">
+                        Sign Up
+                      </a>
+                    </p>
+                  </div>
                 </div>
-            </section>
+              </div>
+            </div>
+          </div>
         </div>
-     
-    );
+      </section>
+    </div>
+  );
 }
 
 export default Login;
