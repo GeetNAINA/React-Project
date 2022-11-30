@@ -1,14 +1,15 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 function Login() {
   const initialValues = { email: '', password: '' };
   const [formValues, setFormValues] = useState(initialValues);
   const [formErrors, setFormErrors] = useState({});
+  const [error, setError] = useState('');
   const [isSubmit, setIsSubmit] = useState(false);
-  const [loading, setLoading]= useState( false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate()
 
   const handleChange = (e) => {
@@ -26,31 +27,38 @@ function Login() {
       identifier: formValues.email,
       password: formValues.password,
     };
-    try {
-      axios
-        .post(
-          'https://bat-recup-staging-backend.cleverapps.io/api/users-permissions/login-annuaire',
-          PAYLOAD
-        )
+    axios
+      .post(
+        'https://bat-recup-staging-backend.cleverapps.io/api/users-permissions/login-annuaire',
+        PAYLOAD
+      )
 
-        .then((resp) => {
-          console.log(resp.data);
-          const token = resp?.data?.jwt;
-          localStorage.setItem('token', token); // are you sure that the object returned by the api has a token field? :D :P
-          navigate('/dashboard');
-          setLoading(true);
-        });
-    } catch (err) {
-      setLoading(false);
-      console.log(err?.resp?.data?.error)
-       if (err.code === 'ERR_BAD_REQUEST') 
-       {
-        setFormErrors('Invalid User and Pasword');
-      } else {
-        alert('Login Failed');
-      } // THE ERROR MESSAGE IS NOT DISPLAYED
-    }
-  };
+      .then((resp) => {
+        console.log(resp.data);
+        const token = resp?.data?.jwt;
+        localStorage.setItem('token', token); 
+        navigate('/dashboard');
+        window.location.reload(false)
+        setLoading(true);
+
+      })
+
+      .catch((err) => {
+        setLoading(false);
+        setFormValues(initialValues);
+        // console.log(err?.resp?.data.error)
+        if (err.code === 'ERR_BAD_REQUEST') 
+          setError('Invalid User and Pasword');
+        
+
+        else {
+          alert('Login Failed');
+          // THE ERROR MESSAGE IS NOT DISPLAYED
+        }
+      });
+  }
+
+
 
   const validate = (values) => {
     const errors = {};
@@ -60,11 +68,8 @@ function Login() {
     }
     if (!values.email) {
       errors.email = ' * Email is required!';
-      console.log(values.email);
     } else if (!regex.test(values.email)) {
       errors.email = 'This is not a valid email!';
-      console.log('email is not valid');
-      console.log(values.email);
     }
     return errors;
   };
@@ -81,8 +86,8 @@ function Login() {
                     <p className="text-dark-50 mb-5">
                       Please enter your login and password!
                     </p>
-                    {isSubmit === true &&  formErrors.length > 0 && (
-                      <p className="text-error">{formErrors.error.message}</p>
+                    {isSubmit === true && error.length === 0 && (
+                      <p className="text-error">{error}</p>
                     )}
 
                     <form onSubmit={handleSubmit}>
@@ -125,17 +130,17 @@ function Login() {
                         </a>
                       </p>
 
-                    {!loading && <button
+                      {!loading && <button
                         className="btn btn-dark btn-lg px-5"
                         type="submit"
                       > {''}
                         Login
-                      </button>}  
+                      </button>}
                       {loading && <button
                         className="btn btn-dark btn-lg px-5"
                         type="submit" disabled
                       > {''}
-                           <i className='fas fa-spinner fa-spin'></i> Loading...
+                        <i className='fas fa-spinner fa-spin'></i> Loading...
                       </button>}
                     </form>
                   </div>
